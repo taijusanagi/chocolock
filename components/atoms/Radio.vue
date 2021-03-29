@@ -4,7 +4,7 @@
       <input
         type="radio"
         name="radio"
-        :checked="i == 0 ? true : false"
+        :checked="i === 0 ? true : false"
         class="form-radio"
         :value="value"
         @change="onChange"
@@ -20,17 +20,17 @@ export default Vue.extend({
   props: {
     values: {
       type: Array,
-      default: undefined
+      default: undefined,
     },
     labels: {
       type: Array,
-      default: undefined
-    }
+      default: undefined,
+    },
   },
   methods: {
     onChange(e: any) {
       this.$emit("input", e.target.value);
-    }
-  }
+    },
+  },
 });
 </script>

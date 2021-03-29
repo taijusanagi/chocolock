@@ -1,14 +1,16 @@
 <template>
   <section>
-    <div class="w-full mb-8">
-      <h2 class="h-20 w-20 mx-auto text-center text-6xl">🔑</h2>
+    <div class="w-full mb-8 flex p-4 items-center justify-center">
+      <img class="h-20 w-20" src="~/assets/img/lock.png" />
     </div>
     <form class="mb-8">
       <AtomsRadio v-model="chainId" :values="chainIdValues" :labels="chainIdLabels" class="mb-1" />
       <AtomsLabel text="NFT Contract Address" />
-      <AtomsInput v-model="nftContractAddress" type="text" placeholder="0x..." class="mb-2" />
+      <AtomsInput v-model="nftContractAddress" type="text" placeholder="0x..." class="mb-6" />
       <AtomsLabel text="Content URL" />
-      <AtomsInput v-model="sendToAddress" type="text" placeholder="https://..." class="mb-2" />
+      <AtomsInput v-model="contentUrl" type="text" placeholder="https://..." class="mb-2" />
+      <AtomsLabel text="Embed Content" />
+      <AtomsInput v-model="embedContent" type="text" placeholder="<iframe..." class="mb-2" />
       <AtomsLabel text="Password" />
       <AtomsInput v-model="sendToAddress" type="password" placeholder="password" class="mb-2" />
     </form>
@@ -35,19 +37,20 @@ export default Vue.extend({
       chainId: chainIdValues[0],
       sendToAddress: "",
       nftContractAddress: "",
+      contentUrl: "",
       tokenId: "",
       image: "",
     };
   },
   methods: {
-    async send(e: unknown) {
+    async send() {
       this.toggleLoadingOverlay();
       try {
         const { chainId, sendToAddress, nftContractAddress, tokenId } = this;
         const provider = await initializeWeb3Modal();
         const signer = await getEthersSigner(provider);
         const signerNetwork = await signer.provider.getNetwork();
-        if (chainId != signerNetwork.chainId.toString()) {
+        if (chainId !== signerNetwork.chainId.toString()) {
           const networkName = getNetworkNameFromChainId(chainId);
           this.openNotificationToast({ type: "error", text: `Please connect ${networkName} network` });
           this.toggleLoadingOverlay();
@@ -57,13 +60,13 @@ export default Vue.extend({
         const attachedNftContract = erc721Contract.attach(nftContractAddress);
         const userAddress = await signer.getAddress();
         const owner = await attachedNftContract.ownerOf(tokenId);
-        if (userAddress.toLowerCase() != owner.toLowerCase()) {
+        if (userAddress.toLowerCase() !== owner.toLowerCase()) {
           this.openNotificationToast({ type: "error", text: `Selected account is not NFT owner` });
           this.toggleLoadingOverlay();
           return;
         }
         let tokenURI = await attachedNftContract.tokenURI(tokenId);
-        if (tokenURI.substring(0, 4) == "ipfs") {
+        if (tokenURI.substring(0, 4) === "ipfs") {
           const cid = tokenURI.split("//")[1];
           tokenURI = `https://ipfs.io/ipfs/${cid}`;
         }
