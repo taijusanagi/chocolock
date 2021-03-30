@@ -4,7 +4,7 @@
     <div v-for="(lock, index) of lockList" :key="index" class="mb-8">
       <NuxtLink :to="`/locks/${lock.id}`"><MoleculesCard :lock="lock" /></NuxtLink>
     </div>
-    <NuxtLink to="/create">
+    <NuxtLink to="/locks/create">
       <AtomsButton>New</AtomsButton>
     </NuxtLink>
   </section>

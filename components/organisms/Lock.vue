@@ -18,7 +18,7 @@
       {{ password ? password : "🔒" }}
     </p>
     <AtomsButton v-if="password === ''" class="mb-4" @click="unlock">Unlock</AtomsButton>
-    <AtomsButton>Edit</AtomsButton>
+    <AtomsButton v-if="lock.userAddress === userAddress">Edit</AtomsButton>
   </section>
 </template>
 
@@ -38,6 +38,11 @@ export default Vue.extend({
     return {
       password: "",
     };
+  },
+  computed: {
+    userAddress() {
+      return this.$store.state.user.address;
+    },
   },
   methods: {
     getNetworkNameFromChainId(chainId: string) {
