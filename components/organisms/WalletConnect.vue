@@ -22,7 +22,6 @@ export default Vue.extend({
       const userAddress = await signIn();
       this.$store.commit("user/setAddress", userAddress);
       const previousPath = localStorage.getItem("@previous_path");
-      console.log("previousPath", previousPath);
       if (previousPath) {
         this.$router.push(previousPath);
       } else {
