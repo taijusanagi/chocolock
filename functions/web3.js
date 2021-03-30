@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 const { ethers } = require("ethers");
-const chainIdConfig = require("../modules/web3/configs/chainId.json");
-const networkConfig = require("../modules/web3/configs/network.json");
-const { abi } = require("../modules/web3/configs/erc721.json");
+const { abi } = require("./configs/erc721.json");
+const chainIdConfig = require("./configs/chainId.json");
+const networkConfig = require("./configs/network.json");
 
 const NULL_ADDRESS = "0x0000000000000000000000000000000000000000";
 
