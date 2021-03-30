@@ -1,5 +1,5 @@
 <template>
-  <label class="text-xs font-bold text-secondary">{{ text }}</label>
+  <label class="text-xs font-medium text-secondary">{{ text }}</label>
 </template>
 
 <script lang="ts">
@@ -8,8 +8,8 @@ export default Vue.extend({
   props: {
     text: {
       type: String,
-      default: undefined
-    }
-  }
+      default: undefined,
+    },
+  },
 });
 </script>

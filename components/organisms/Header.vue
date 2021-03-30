@@ -17,14 +17,7 @@
 </template>
 
 <script lang="ts">
-import {
-  initializeWeb3Modal,
-  getEthersSigner,
-  getContractsForChainId,
-  getNetworkNameFromChainId,
-  chainIdLabels,
-  chainIdValues,
-} from "@/modules/web3";
+import { signIn } from "@/modules/user";
 
 import { shortenAddress } from "@/modules/util";
 import Vue from "vue";
@@ -37,9 +30,7 @@ export default Vue.extend({
   },
   methods: {
     async signIn() {
-      const provider = await initializeWeb3Modal();
-      const signer = await getEthersSigner(provider);
-      const userAddress = await signer.getAddress();
+      const userAddress = await signIn();
       this.$store.commit("user/setAddress", userAddress);
     },
     shortenAddress(address: string) {

@@ -1,18 +1,20 @@
 <template>
   <section>
-    <div class="w-full mb-8 flex p-4 items-center justify-center">
+    <div class="w-full mb-4 flex items-center justify-center">
       <img class="h-20 w-20" src="~/assets/img/lock.png" />
     </div>
     <form class="mb-8">
       <AtomsRadio v-model="chainId" :values="chainIdValues" :labels="chainIdLabels" class="mb-1" />
       <AtomsLabel text="NFT Contract Address" />
-      <AtomsInput v-model="nftContractAddress" type="text" placeholder="0x..." class="mb-6" />
+      <AtomsInput v-model="nftContractAddress" type="text" placeholder="0x..." class="mb-2" />
+      <AtomsLabel text="Token Id (Optional)" />
+      <AtomsInput v-model="tokenId" type="number" placeholder="" class="mb-4" />
       <AtomsLabel text="Content URL" />
       <AtomsInput v-model="contentUrl" type="text" placeholder="https://..." class="mb-2" />
       <AtomsLabel text="Embed Content" />
       <AtomsInput v-model="embedContent" type="text" placeholder="<iframe..." class="mb-2" />
       <AtomsLabel text="Password" />
-      <AtomsInput v-model="sendToAddress" type="password" placeholder="password" class="mb-2" />
+      <AtomsInput v-model="password" type="password" placeholder="password" class="mb-2" />
     </form>
     <AtomsButton class="w-32 mx-auto" @click="send">Lock</AtomsButton>
   </section>
@@ -22,11 +24,13 @@
 import {
   initializeWeb3Modal,
   getEthersSigner,
+  getWeb3,
   getContractsForChainId,
   getNetworkNameFromChainId,
   chainIdLabels,
   chainIdValues,
 } from "@/modules/web3";
+import { functions } from "@/modules/firebase";
 import Vue from "vue";
 
 export default Vue.extend({
@@ -35,18 +39,18 @@ export default Vue.extend({
       chainIdValues,
       chainIdLabels,
       chainId: chainIdValues[0],
-      sendToAddress: "",
       nftContractAddress: "",
-      contentUrl: "",
       tokenId: "",
-      image: "",
+      contentUrl: "",
+      embedContent: "",
+      password: "",
     };
   },
   methods: {
     async send() {
       this.toggleLoadingOverlay();
       try {
-        const { chainId, sendToAddress, nftContractAddress, tokenId } = this;
+        const { chainId, nftContractAddress, tokenId, contentUrl, embedContent, password } = this;
         const provider = await initializeWeb3Modal();
         const signer = await getEthersSigner(provider);
         const signerNetwork = await signer.provider.getNetwork();
@@ -56,30 +60,16 @@ export default Vue.extend({
           this.toggleLoadingOverlay();
           return;
         }
-        const { erc721Contract, explore } = getContractsForChainId(chainId);
-        const attachedNftContract = erc721Contract.attach(nftContractAddress);
-        const userAddress = await signer.getAddress();
-        const owner = await attachedNftContract.ownerOf(tokenId);
-        if (userAddress.toLowerCase() !== owner.toLowerCase()) {
-          this.openNotificationToast({ type: "error", text: `Selected account is not NFT owner` });
-          this.toggleLoadingOverlay();
-          return;
-        }
-        let tokenURI = await attachedNftContract.tokenURI(tokenId);
-        if (tokenURI.substring(0, 4) === "ipfs") {
-          const cid = tokenURI.split("//")[1];
-          tokenURI = `https://ipfs.io/ipfs/${cid}`;
-        }
-        const data = await this.$axios.$get(tokenURI);
-        const { image } = data;
-        this.image = image;
-        const { hash } = await attachedNftContract.connect(signer).transferFrom(userAddress, sendToAddress, tokenId);
-        this.toggleLoadingOverlay();
-        this.openMessageModal({
-          messageText: "Transaction submitted!",
-          buttonText: "Check",
-          url: `${explore}tx/${hash}`,
+        const { data } = await functions.httpsCallable("lock")({
+          chainId,
+          nftContractAddress,
+          tokenId,
+          contentUrl,
+          embedContent,
+          password,
         });
+
+        this.toggleLoadingOverlay();
       } catch (err) {
         this.toggleLoadingOverlay();
         this.openNotificationToast({ type: "error", text: err.message });

@@ -34,5 +34,6 @@
     "auth": {
       "port": 9099
     }
-  }
+  },
+  "region": "asia-northeast1"
 }
