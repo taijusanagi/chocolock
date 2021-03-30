@@ -19,8 +19,6 @@
 </template>
 
 <script lang="ts">
-import { signIn } from "@/modules/user";
-
 import { shortenAddress } from "@/modules/util";
 import Vue from "vue";
 

@@ -65,11 +65,15 @@ module.exports.unlock = functions.region("asia-northeast1").https.onCall(async (
   }
   const lock = doc.data();
   const { erc721Contract } = getContractsForChainId(lock.chainId);
-  const balance = await erc721Contract.attach(lock.nftContractAddress).balanceOf(context.auth.uid);
-  if (!ethers.BigNumber.from(balance).gt(0)) {
-    throw new functions.https.HttpsError("failed-precondition", "The function must be called " + "by nft owner");
+  try {
+    const balance = await erc721Contract.attach(lock.nftContractAddress).balanceOf(context.auth.uid);
+    if (!ethers.BigNumber.from(balance).gt(0)) {
+      throw new functions.https.HttpsError("failed-precondition", "The function must be called " + "by nft owner");
+    }
+    const decipher = crypto.createDecipheriv(algorithm, secretKey, Buffer.from(lock.iv, "hex"));
+    const decrpyted = Buffer.concat([decipher.update(Buffer.from(lock.encryptedPassword, "hex")), decipher.final()]);
+    return decrpyted.toString();
+  } catch (err) {
+    throw new functions.https.HttpsError("failed-precondition", err.message);
   }
-  const decipher = crypto.createDecipheriv(algorithm, secretKey, Buffer.from(lock.iv, "hex"));
-  const decrpyted = Buffer.concat([decipher.update(Buffer.from(lock.encryptedPassword, "hex")), decipher.final()]);
-  return decrpyted.toString();
 });

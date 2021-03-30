@@ -1,6 +1,6 @@
 <template>
   <section v-if="lock.id !== undefined">
-    <div class="w-full my-8 flex items-center justify-center">
+    <div class="w-full mb-8 flex items-center justify-center">
       <img class="h-20 w-20" src="~/assets/img/lock.png" />
     </div>
     <p class="text-primary text-md font-medium mb-1">Locked Content</p>
@@ -17,10 +17,10 @@
     <p class="text-xs text-secondary mb-8">
       {{ password ? password : "🔒" }}
     </p>
-    <AtomsButton v-if="password === ''" class="mb-4" @click="unlock">Unlock</AtomsButton>
-    <NuxtLink v-if="lock.userAddress === userAddress" :to="`./${lock.id}/edit`"
-      ><AtomsButton>Edit</AtomsButton></NuxtLink
-    >
+    <div class="mb-4">
+      <AtomsButton v-if="password === '' && isOwner" @click="unlock">Unlock</AtomsButton>
+    </div>
+    <AtomsButton v-if="lock.userAddress === userAddress">Delete</AtomsButton>
   </section>
 </template>
 
@@ -35,6 +35,10 @@ export default Vue.extend({
       type: Object,
       default: undefined,
     },
+    isOwner: {
+      type: Boolean,
+      default: undefined,
+    },
   },
   data() {
     return {
@@ -47,6 +51,12 @@ export default Vue.extend({
     },
   },
   methods: {
+    toggleLoadingOverlay() {
+      this.$store.commit("loadingOverlay/toggle");
+    },
+    openNotificationToast(props: any) {
+      this.$store.commit("notificationToast/open", props);
+    },
     getNetworkNameFromChainId(chainId: string) {
       return getNetworkNameFromChainId(chainId);
     },
@@ -55,10 +65,16 @@ export default Vue.extend({
       return `${explore}address/${address}`;
     },
     async unlock() {
-      const { data } = await functions.httpsCallable("unlock")({
-        id: this.lock.id,
-      });
-      this.password = data;
+      this.toggleLoadingOverlay();
+      try {
+        const { data } = await functions.httpsCallable("unlock")({
+          id: this.lock.id,
+        });
+        this.password = data;
+      } catch (err) {
+        this.openNotificationToast({ type: "error", text: err.message });
+        this.toggleLoadingOverlay();
+      }
     },
   },
 });
