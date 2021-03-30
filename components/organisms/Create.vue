@@ -24,8 +24,6 @@
 import {
   initializeWeb3Modal,
   getEthersSigner,
-  getWeb3,
-  getContractsForChainId,
   getNetworkNameFromChainId,
   chainIdLabels,
   chainIdValues,

@@ -24,11 +24,6 @@
 import Vue, { PropType } from "vue";
 
 export default Vue.extend({
-  mounted() {
-    setInterval(() => {
-      this.closeNotificationToast();
-    }, 3500);
-  },
   props: {
     type: {
       type: String as PropType<"default" | "error">,
@@ -38,6 +33,11 @@ export default Vue.extend({
       type: String,
       default: undefined,
     },
+  },
+  mounted() {
+    setInterval(() => {
+      this.closeNotificationToast();
+    }, 3500);
   },
   methods: {
     closeNotificationToast() {

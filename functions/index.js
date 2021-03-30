@@ -1,24 +1,16 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 const crypto = require("crypto");
-const { encrypt } = require("eth-sig-util");
 const admin = require("firebase-admin");
 const functions = require("firebase-functions");
 const { ethers } = require("ethers");
-
 const { v4: uuidv4 } = require("uuid");
-
-const { KeyManagementServiceClient } = require("@google-cloud/kms");
 const { signatureMessage } = require("./constant");
 
 admin.initializeApp();
 const firestore = admin.firestore();
 
-const kmsConfig = {
-  projectId: "chocolock-prod",
-  locationId: "asia-southeast1",
-  keyRingId: "chocolock-prod",
-  keyId: "encryption",
-};
+const algorithm = "aes-256-ctr";
+const secretKey = "vOVH6sdmpNWjRRIqCc7rdxs01lwHzfr3";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 module.exports.signIn = functions.region("asia-northeast1").https.onCall(async (data, context) => {
@@ -38,15 +30,12 @@ module.exports.lock = functions.region("asia-northeast1").https.onCall(async (da
   }
   const userAddress = context.auth.uid;
   const { chainId, nftContractAddress, tokenId, contentUrl, embedContent, password } = data;
-  const client = new KeyManagementServiceClient();
-  const keyName = client.cryptoKeyPath(kmsConfig.projectId, kmsConfig.locationId, kmsConfig.keyRingId, kmsConfig.keyId);
-  const plaintextBuffer = Buffer.from(password);
-  const encryptedPassword = await client.encrypt({
-    name: keyName,
-    plaintext: plaintextBuffer,
-  });
-  const uid = uuidv4();
-  await firestore.collection("locks").doc(uid).set({
+  const id = uuidv4();
+  const iv = crypto.randomBytes(16);
+  const cipher = crypto.createCipheriv(algorithm, secretKey, iv);
+  const encryptedPassword = Buffer.concat([cipher.update(password), cipher.final()]);
+  await firestore.collection("locks").doc(id).set({
+    id,
     userAddress,
     nftContractAddress,
     chainId,
@@ -54,6 +43,7 @@ module.exports.lock = functions.region("asia-northeast1").https.onCall(async (da
     contentUrl,
     embedContent,
     encryptedPassword,
+    iv,
   });
 });
 

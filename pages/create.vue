@@ -1,6 +1,6 @@
 <template>
   <AtomsContainer>
-    <OrganismsLocks />
+    <OrganismsCreate />
   </AtomsContainer>
 </template>
 

@@ -1,10 +1,10 @@
 <template>
   <div class="border rounded-md p-4 relative shadow-sm">
-    <p class="absolute right-0 top-0 p-4 text-xs text-secondary font-bold">
+    <p class="text-xs font-bold text-secondary mb-2">{{ lock.contentUrl }}</p>
+    <p class="text-xs-address text-tertiary">
       {{ getNetworkNameFromChainId(lock.chainId) }}
     </p>
-    <p class="text-sm font-bold text-secondary">{{ lock.contentUrl }}</p>
-    <p class="text-xs text-tertiary">{{ lock.nftContractAddress }}</p>
+    <p class="text-xs-address text-tertiary">{{ lock.nftContractAddress }}</p>
   </div>
 </template>
 
@@ -25,3 +25,9 @@ export default Vue.extend({
   },
 });
 </script>
+
+<style scoped>
+.text-xs-address {
+  font-size: 0.5rem;
+}
+</style>

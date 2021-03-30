@@ -6,8 +6,8 @@
     <MoleculesLoadingOverlay v-if="isLoadingOverlayDisplayed" />
     <MoleculesMessageModal
       v-if="isMessageModalDisplayed"
-      :messageText="messageModalMessageText"
-      :buttonText="messageModalButtonText"
+      :message-text="messageModalMessageText"
+      :button-text="messageModalButtonText"
       :url="messageModalUrl"
     />
     <MoleculesNotificationToast
@@ -45,7 +45,13 @@ export default Vue.extend({
     },
     notificationToastText() {
       return this.$store.state.notificationToast.props.text;
-    }
-  }
+    },
+  },
 });
+</script>
+
+<script>
+export default {
+  middleware: "authenticated",
+};
 </script>

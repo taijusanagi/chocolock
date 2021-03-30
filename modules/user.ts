@@ -5,7 +5,8 @@ import { signatureMessage } from "@/functions/constant";
 export const signIn = async () => {
   const provider = await initializeWeb3Modal();
   const web3 = await getWeb3(provider);
-  const [userAddress] = await web3.eth.getAccounts();
+  const [userAddressChecked] = await web3.eth.getAccounts();
+  const userAddress = userAddressChecked.toLowerCase();
   const message = signatureMessage;
   const signature = await web3.eth.personal.sign(`${message}${userAddress}`, userAddress, "");
   const response = await functions.httpsCallable("signIn")({
