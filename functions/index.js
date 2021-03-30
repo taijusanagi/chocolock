@@ -72,7 +72,7 @@ module.exports.unlock = functions.region("asia-northeast1").https.onCall(async (
     if (!ethers.BigNumber.from(balance).gt(0)) {
       throw new functions.https.HttpsError("failed-precondition", "The function must be called " + "by nft owner");
     }
-    const decipher = crypto.createDecipheriv(algorithm, secretKey, Buffer.from(lock.iv, "hex"));
+    const decipher = crypto.createDecipheriv(algorithm, Buffer.from(secretKey, "hex"), Buffer.from(lock.iv, "hex"));
     const decrpyted = Buffer.concat([decipher.update(Buffer.from(lock.encryptedPassword, "hex")), decipher.final()]);
     return decrpyted.toString();
   } catch (err) {

@@ -1,5 +1,6 @@
 export default function ({ store, redirect, route }: any) {
-  if (route.path !== "/signin") {
+  console.log("route.path", route.path);
+  if (route.path !== "/signin" && route.path !== "/signin/") {
     const path = route.path.replace(/\/$/, "");
     localStorage.setItem("@previous_path", path);
   }
