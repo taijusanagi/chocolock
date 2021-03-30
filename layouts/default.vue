@@ -21,6 +21,7 @@
 <script lang="ts">
 import Vue from "vue";
 export default Vue.extend({
+  middleware: "authenticated",
   computed: {
     isLoadingOverlayDisplayed() {
       return this.$store.state.loadingOverlay.isDisplayed;
@@ -48,10 +49,4 @@ export default Vue.extend({
     },
   },
 });
-</script>
-
-<script>
-export default {
-  middleware: "authenticated",
-};
 </script>

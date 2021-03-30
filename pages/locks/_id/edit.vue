@@ -1,6 +1,6 @@
 <template>
   <AtomsContainer>
-    <OrganismsEdit :lock="lock" />
+    <OrganismsSetLock :lock="lock" />
   </AtomsContainer>
 </template>
 
@@ -21,6 +21,7 @@ export default Vue.extend({
     if (!lock) {
       return;
     }
+    console.log(lock);
     this.lock = lock;
   },
 });

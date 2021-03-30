@@ -1,7 +1,7 @@
-import StoryComponent from "./Create";
+import StoryComponent from "./SetLock";
 
 export default {
-  title: "Organisms/Create",
+  title: "Organisms/SetLock",
   component: StoryComponent,
 };
 

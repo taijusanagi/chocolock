@@ -1,7 +1,7 @@
 <template>
   <div
     :class="`fixed z-1 top-0 right-0 mt-20 mr-4 w-64 h-20 shadow rounded-md overflow-hidden transition-opacity ease-in-out ${
-      type === 'error' && 'bg-red-100'
+      type === 'error' ? 'bg-red-100' : 'bg-white'
     }`"
   >
     <div class="px-3 pt-2 pb-4">

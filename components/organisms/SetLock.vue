@@ -8,7 +8,7 @@
       <AtomsLabel text="NFT Contract Address" />
       <AtomsInput
         v-model="nftContractAddress"
-        :initial-value="nftContractAddress"
+        :initial-value="lock && lock.nftContractAddress"
         type="text"
         placeholder="0x..."
         class="mb-2"
@@ -16,7 +16,7 @@
       <AtomsLabel text="Content URL" />
       <AtomsInput
         v-model="contentUrl"
-        :initial-value="contentUrl"
+        :initial-value="lock && lock.contentUrl"
         :value="contentUrl"
         type="text"
         placeholder="https://..."
@@ -51,9 +51,9 @@ export default Vue.extend({
     return {
       chainIdValues,
       chainIdLabels,
-      chainId: this.lock.chainId,
-      nftContractAddress: this.lock.nftContractAddress,
-      contentUrl: this.lock.contentUrl,
+      chainId: this.lock ? this.lock.chainId : chainIdValues[0],
+      nftContractAddress: this.lock ? this.lock.nftContractAddress : "",
+      contentUrl: this.lock ? this.lock.contentUrl : "",
       password: "",
     };
   },
