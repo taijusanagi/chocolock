@@ -51,4 +51,7 @@ export default {
   storybook: {
     // Options
   },
+  router: {
+    trailingSlash: false,
+  },
 };

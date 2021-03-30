@@ -63,7 +63,7 @@ export default Vue.extend({
         });
         this.openNotificationToast({ type: "success", text: "Content is locked!" });
         this.toggleLoadingOverlay();
-        this.$router.push(`/locks/${data}`);
+        this.$router.push(`/locks/${data}/`);
       } catch (err) {
         this.toggleLoadingOverlay();
         this.openNotificationToast({ type: "error", text: err });
