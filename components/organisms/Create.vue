@@ -1,6 +1,6 @@
 <template>
   <section>
-    <div class="w-full mb-4 flex items-center justify-center">
+    <div class="w-full my-8 flex items-center justify-center">
       <img class="h-20 w-20" src="~/assets/img/lock.png" />
     </div>
     <form class="mb-8">
@@ -11,8 +11,6 @@
       <AtomsInput v-model="tokenId" type="number" placeholder="" class="mb-4" />
       <AtomsLabel text="Content URL" />
       <AtomsInput v-model="contentUrl" type="text" placeholder="https://..." class="mb-2" />
-      <AtomsLabel text="Embed Content" />
-      <AtomsInput v-model="embedContent" type="text" placeholder="<iframe..." class="mb-2" />
       <AtomsLabel text="Password" />
       <AtomsInput v-model="password" type="password" placeholder="password" class="mb-2" />
     </form>
@@ -40,7 +38,6 @@ export default Vue.extend({
       nftContractAddress: "",
       tokenId: "",
       contentUrl: "",
-      embedContent: "",
       password: "",
     };
   },
@@ -48,7 +45,7 @@ export default Vue.extend({
     async send() {
       this.toggleLoadingOverlay();
       try {
-        const { chainId, nftContractAddress, tokenId, contentUrl, embedContent, password } = this;
+        const { chainId, nftContractAddress, tokenId, contentUrl, password } = this;
         const provider = await initializeWeb3Modal();
         const signer = await getEthersSigner(provider);
         const signerNetwork = await signer.provider.getNetwork();
@@ -63,7 +60,6 @@ export default Vue.extend({
           nftContractAddress,
           tokenId,
           contentUrl,
-          embedContent,
           password,
         });
 

@@ -1,11 +1,12 @@
 <template>
   <section>
-    <NuxtLink to="/create">
-      <AtomsButton class="mb-8">New</AtomsButton>
-    </NuxtLink>
-    <div v-for="(lock, index) of lockList" :key="index" class="mb-2">
+    <p class="text-primary text-xl font-medium mb-4">Your Locks</p>
+    <div v-for="(lock, index) of lockList" :key="index" class="mb-8">
       <NuxtLink :to="`/locks/${lock.id}`"><MoleculesCard :lock="lock" /></NuxtLink>
     </div>
+    <NuxtLink to="/create">
+      <AtomsButton>New</AtomsButton>
+    </NuxtLink>
   </section>
 </template>
 

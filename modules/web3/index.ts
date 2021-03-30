@@ -53,8 +53,11 @@ export const chainIdLabels = ["Rinkeby", "Mainnet", "BSC", "Matic"];
 export const chainIdValues = ["4", "1", "56", "137"];
 
 export const getContractsForChainId = (chainId: string) => {
+  console.log(chainId);
   const networkName = getNetworkNameFromChainId(chainId);
+  console.log(networkName);
   const { rpc, explore } = networkConfig[networkName];
+  console.log(rpc, explore);
   const provider = new ethers.providers.JsonRpcProvider(rpc);
   const erc721Contract = new ethers.Contract(NULL_ADDRESS, abi, provider);
   return { erc721Contract, explore, provider };

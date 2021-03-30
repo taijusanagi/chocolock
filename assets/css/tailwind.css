@@ -12,4 +12,10 @@
   .text-tertiary {
     @apply text-gray-500;
   }
+  .text-url {
+    @apply text-blue-400 underline;
+  }
+  .text-xs-address {
+    font-size: 0.5rem;
+  }
 }

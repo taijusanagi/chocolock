@@ -2,7 +2,7 @@
   <header>
     <div class="relative h-20">
       <NuxtLink to="/">
-        <div class="px-4 py-8 absolute left-0 text-gray-900 font-bold">Chocolock</div>
+        <div class="px-4 py-8 absolute left-0 text-gray-900 font-bold">Chocolock 🔐</div>
       </NuxtLink>
       <div v-if="displaySignInButton" class="px-4 py-6 absolute right-0">
         <NuxtLink v-if="userAddress === ''" to="/signin">

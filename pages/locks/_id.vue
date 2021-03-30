@@ -1,5 +1,5 @@
 <template>
-  <AtomsContainer><OrganismsViewer :lock="lock" /></AtomsContainer>
+  <AtomsContainer><OrganismsLock :lock="lock" /></AtomsContainer>
 </template>
 
 <script lang="ts">

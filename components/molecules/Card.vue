@@ -25,9 +25,3 @@ export default Vue.extend({
   },
 });
 </script>
-
-<style scoped>
-.text-xs-address {
-  font-size: 0.5rem;
-}
-</style>
