@@ -13,7 +13,7 @@
     "start": "nuxt start",
     "generate": "nuxt generate",
     "storybook": "nuxt storybook -p 6006 --ci",
-    "deploy": "firebase deploy --only hosting,functions"
+    "deploy": "firebase deploy --only hosting,functions,firestore"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.35",
