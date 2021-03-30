@@ -21,12 +21,12 @@
 </template>
 
 <script lang="ts">
-import Vue, { PropType } from "vue";
+import Vue from "vue";
 
 export default Vue.extend({
   props: {
     type: {
-      type: String as PropType<"default" | "error">,
+      type: String,
       default: undefined,
     },
     text: {
