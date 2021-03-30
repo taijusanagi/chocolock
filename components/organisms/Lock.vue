@@ -14,8 +14,10 @@
       </p>
     </a>
     <p class="text-primary text-md font-medium mb-1">Password</p>
-    <p class="text-xs text-secondary mb-8">🔒</p>
-    <AtomsButton class="mb-4">Unlock</AtomsButton>
+    <p class="text-xs text-secondary mb-8">
+      {{ password ? password : "🔒" }}
+    </p>
+    <AtomsButton v-if="password === ''" class="mb-4" @click="unlock">Unlock</AtomsButton>
     <AtomsButton>Edit</AtomsButton>
   </section>
 </template>
@@ -23,12 +25,19 @@
 <script lang="ts">
 import Vue from "vue";
 import { getNetworkNameFromChainId, getContractsForChainId } from "@/modules/web3";
+import { functions } from "@/modules/firebase";
+
 export default Vue.extend({
   props: {
     lock: {
       type: Object,
       default: undefined,
     },
+  },
+  data: () => {
+    return {
+      password: "",
+    };
   },
   methods: {
     getNetworkNameFromChainId(chainId: string) {
@@ -37,6 +46,13 @@ export default Vue.extend({
     getExploreUrl(chainId: string, address: string) {
       const { explore } = getContractsForChainId(chainId);
       return `${explore}address/${address}`;
+    },
+    async unlock() {
+      const { data } = await functions.httpsCallable("unlock")({
+        iv: this.lock.iv,
+        encryptedPassword: this.lock.encryptedPassword,
+      });
+      this.password = data;
     },
   },
 });

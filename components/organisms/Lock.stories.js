@@ -17,6 +17,6 @@ Default.args = {
     id: "id",
     chainId: "1",
     contentUrl: "https://vimeo.com/310675655",
-    nftContractAddress: "0x84E9445f43995b0C6a4D4C1d40bb123571c2Eb06",
+    nftContractAddress: "0x84f6261350151dc9cbf5b33c5354fe9a82166e26",
   },
 };

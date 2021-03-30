@@ -29,11 +29,14 @@ module.exports.lock = functions.region("asia-northeast1").https.onCall(async (da
     );
   }
   const userAddress = context.auth.uid;
-  const { chainId, nftContractAddress, tokenId, contentUrl, embedContent, password } = data;
+  const { chainId, nftContractAddress, tokenId, contentUrl, password } = data;
   const id = uuidv4();
-  const iv = crypto.randomBytes(16);
-  const cipher = crypto.createCipheriv(algorithm, secretKey, iv);
-  const encryptedPassword = Buffer.concat([cipher.update(password), cipher.final()]);
+  const ivBuffer = crypto.randomBytes(16);
+  const cipher = crypto.createCipheriv(algorithm, secretKey, ivBuffer);
+  const encryptedPasswordBuffer = Buffer.concat([cipher.update(password), cipher.final()]);
+
+  const iv = ivBuffer.toString("hex");
+  const encryptedPassword = encryptedPasswordBuffer.toString("hex");
   await firestore.collection("locks").doc(id).set({
     id,
     userAddress,
@@ -41,16 +44,16 @@ module.exports.lock = functions.region("asia-northeast1").https.onCall(async (da
     chainId,
     tokenId,
     contentUrl,
-    embedContent,
     encryptedPassword,
     iv,
   });
+  return id;
 });
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-module.exports.unlock = functions.region("asia-northeast1").https.onCall(async (data, context) => {
-  // const { iv, encryptedPassword } = data;
-  // const decipher = crypto.createDecipheriv(algorithm, secretKey, Buffer.from(iv, "hex"));
-  // const decrpyted = Buffer.concat([decipher.update(Buffer.from(encryptedPassword, "hex")), decipher.final()]);
-  // return decrpyted.toString();
+module.exports.unlock = functions.region("asia-northeast1").https.onCall((data, context) => {
+  const { iv, encryptedPassword } = data;
+  const decipher = crypto.createDecipheriv(algorithm, secretKey, Buffer.from(iv, "hex"));
+  const decrpyted = Buffer.concat([decipher.update(Buffer.from(encryptedPassword, "hex")), decipher.final()]);
+  return decrpyted.toString();
 });
