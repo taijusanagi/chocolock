@@ -4,8 +4,6 @@
 
 <script lang="ts">
 import Vue from "vue";
-import { ethers } from "ethers";
-import { getContractsForChainId } from "@/modules/web3";
 import { firestore } from "@/modules/firebase";
 
 export default Vue.extend({
@@ -25,6 +23,7 @@ export default Vue.extend({
     const doc = await firestore.collection("locks").doc(id).get();
     const lock = doc.data();
     if (!lock) {
+      this.$router.push("/locks/");
       return;
     }
     this.lock = lock;

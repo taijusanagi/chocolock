@@ -11,7 +11,9 @@ admin.initializeApp();
 const firestore = admin.firestore();
 
 const algorithm = "aes-256-ctr";
-const secretKey = "vOVH6sdmpNWjRRIqCc7rdxs01lwHzfr3";
+const secretKey = process.env.SECRET_KEY
+  ? process.env.SECRET_KEY
+  : "17fdbd0b2ec008d1008d62d02a49cbf8b11107a177df6e843b1940506cd4788a";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 module.exports.signIn = functions.region("asia-northeast1").https.onCall(async (data, context) => {
@@ -33,7 +35,7 @@ module.exports.lock = functions.region("asia-northeast1").https.onCall(async (da
   const { chainId, nftContractAddress, contentUrl, password } = data;
   const id = uuidv4();
   const ivBuffer = crypto.randomBytes(16);
-  const cipher = crypto.createCipheriv(algorithm, secretKey, ivBuffer);
+  const cipher = crypto.createCipheriv(algorithm, Buffer.from(secretKey, "hex"), ivBuffer);
   const encryptedPasswordBuffer = Buffer.concat([cipher.update(password), cipher.final()]);
 
   const iv = ivBuffer.toString("hex");
