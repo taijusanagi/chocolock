@@ -23,21 +23,21 @@ export default Vue.extend({
   props: {
     messageText: {
       type: String,
-      default: undefined
+      default: undefined,
     },
     buttonText: {
       type: String,
-      default: undefined
+      default: undefined,
     },
     url: {
       type: [String],
-      default: undefined
-    }
+      default: undefined,
+    },
   },
   methods: {
     closeMessageModal() {
       this.$store.commit("messageModal/close");
-    }
-  }
+    },
+  },
 });
 </script>

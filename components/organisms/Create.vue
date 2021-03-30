@@ -7,8 +7,6 @@
       <AtomsRadio v-model="chainId" :values="chainIdValues" :labels="chainIdLabels" class="mb-1" />
       <AtomsLabel text="NFT Contract Address" />
       <AtomsInput v-model="nftContractAddress" type="text" placeholder="0x..." class="mb-2" />
-      <AtomsLabel text="Token Id (Optional)" />
-      <AtomsInput v-model="tokenId" type="number" placeholder="" class="mb-4" />
       <AtomsLabel text="Content URL" />
       <AtomsInput v-model="contentUrl" type="text" placeholder="https://..." class="mb-2" />
       <AtomsLabel text="Password" />
@@ -36,7 +34,6 @@ export default Vue.extend({
       chainIdLabels,
       chainId: chainIdValues[0],
       nftContractAddress: "",
-      tokenId: "",
       contentUrl: "",
       password: "",
     };
@@ -45,7 +42,7 @@ export default Vue.extend({
     async send() {
       this.toggleLoadingOverlay();
       try {
-        const { chainId, nftContractAddress, tokenId, contentUrl, password } = this;
+        const { chainId, nftContractAddress, contentUrl, password } = this;
         const provider = await initializeWeb3Modal();
         const signer = await getEthersSigner(provider);
         const signerNetwork = await signer.provider.getNetwork();
@@ -58,7 +55,6 @@ export default Vue.extend({
         const { data } = await functions.httpsCallable("lock")({
           chainId,
           nftContractAddress,
-          tokenId,
           contentUrl,
           password,
         });

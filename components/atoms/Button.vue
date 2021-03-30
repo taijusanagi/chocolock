@@ -13,7 +13,7 @@ export default Vue.extend({
   methods: {
     onClick(e: unknown) {
       this.$emit("click", e);
-    }
-  }
+    },
+  },
 });
 </script>

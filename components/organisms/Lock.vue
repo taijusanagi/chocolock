@@ -49,8 +49,7 @@ export default Vue.extend({
     },
     async unlock() {
       const { data } = await functions.httpsCallable("unlock")({
-        iv: this.lock.iv,
-        encryptedPassword: this.lock.encryptedPassword,
+        id: this.lock.id,
       });
       this.password = data;
     },
