@@ -77,3 +77,23 @@ module.exports.unlock = functions.region("asia-northeast1").https.onCall(async (
     throw new functions.https.HttpsError("failed-precondition", err.message);
   }
 });
+
+module.exports.delete = functions.region("asia-northeast1").https.onCall(async (data, context) => {
+  if (!context.auth) {
+    throw new functions.https.HttpsError(
+      "failed-precondition",
+      "The function must be called " + "while authenticated."
+    );
+  }
+  const { id } = data;
+  const doc = await firestore.collection("locks").doc(id).get();
+  if (!doc.exists) {
+    throw new functions.https.HttpsError("failed-precondition", "The function must be called " + "for existing lock");
+  }
+  const lock = doc.data();
+  if (lock.userAddress !== context.auth.uid) {
+    throw new functions.https.HttpsError("failed-precondition", "The function must be called " + "by lock owner");
+  }
+  await firestore.collection("locks").doc(id).delete();
+  return "ok";
+});

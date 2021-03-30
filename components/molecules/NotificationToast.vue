@@ -1,7 +1,7 @@
 <template>
   <div
-    :class="`fixed z-1 top-0 right-0 mt-20 mr-4 w-64 h-32 shadow rounded-md overflow-hidden transition-opacity ease-in-out ${
-      type === 'error' ? 'bg-red-100' : 'bg-white'
+    :class="`fixed z-1 top-0 right-0 mt-20 mr-4 w-64 h-24 shadow rounded-md overflow-hidden transition-opacity ease-in-out ${
+      type === 'error' ? 'bg-red-100' : 'bg-green-100'
     }`"
   >
     <div class="px-3 pt-2 pb-4">
@@ -35,9 +35,7 @@ export default Vue.extend({
     },
   },
   mounted() {
-    console.log("test1");
     setTimeout(() => {
-      console.log("test2");
       this.closeNotificationToast();
     }, 5000);
   },

@@ -19,13 +19,7 @@
 <script lang="ts">
 import { ethers } from "ethers";
 
-import {
-  initializeWeb3Modal,
-  getEthersSigner,
-  getNetworkNameFromChainId,
-  chainIdLabels,
-  chainIdValues,
-} from "@/modules/web3";
+import { chainIdLabels, chainIdValues } from "@/modules/web3";
 import { functions } from "@/modules/firebase";
 import Vue from "vue";
 
@@ -58,15 +52,6 @@ export default Vue.extend({
         }
         if (!password || password.trim() === "") {
           this.openNotificationToast({ type: "error", text: `Please input password` });
-          this.toggleLoadingOverlay();
-          return;
-        }
-        const provider = await initializeWeb3Modal();
-        const signer = await getEthersSigner(provider);
-        const signerNetwork = await signer.provider.getNetwork();
-        if (chainId !== signerNetwork.chainId.toString()) {
-          const networkName = getNetworkNameFromChainId(chainId);
-          this.openNotificationToast({ type: "error", text: `Please connect ${networkName} network` });
           this.toggleLoadingOverlay();
           return;
         }

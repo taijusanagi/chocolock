@@ -5,7 +5,7 @@
         <p class="my-8 text-sm text-secondary">Please connect with web3 wallet</p>
         <div class="flex justify-center pointer-events-auto">
           <div class="flex space-x-4">
-            <AtomsButton type="primary" @click="signIn"> Sign In </AtomsButton>
+            <AtomsButton type="primary" @click="signIn"> SignIn </AtomsButton>
           </div>
         </div>
       </div>
@@ -21,7 +21,13 @@ export default Vue.extend({
     async signIn() {
       const userAddress = await signIn();
       this.$store.commit("user/setAddress", userAddress);
-      this.$router.push("/locks");
+
+      const previousPath = localStorage.getItem("@previous_path");
+      if (previousPath) {
+        this.$router.push(previousPath);
+      } else {
+        this.$router.push("/locks");
+      }
     },
   },
 });

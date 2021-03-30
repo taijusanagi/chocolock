@@ -27,14 +27,7 @@ export default Vue.extend({
     if (!lock) {
       return;
     }
-    const { erc721Contract } = getContractsForChainId(lock.chainId);
     this.lock = lock;
-    try {
-      const balance = await erc721Contract.attach(lock.nftContractAddress).balanceOf(this.userAddress);
-      this.isOwner = ethers.BigNumber.from(balance).gt(0);
-    } catch (err) {
-      console.log(err);
-    }
   },
 });
 </script>
