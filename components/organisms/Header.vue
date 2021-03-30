@@ -28,7 +28,7 @@ export default Vue.extend({
       return this.$store.state.user.address;
     },
     displaySignInButton() {
-      return this.$route.path !== "/signin/";
+      return this.$route.path !== "/signin";
     },
   },
   methods: {

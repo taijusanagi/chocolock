@@ -102,7 +102,7 @@ export default Vue.extend({
         await functions.httpsCallable("delete")({
           id: this.lock.id,
         });
-        this.$router.push("/locks/");
+        this.$router.push("/locks");
         this.openNotificationToast({ type: "default", text: "Lock deleted!" });
         this.toggleLoadingOverlay();
       } catch (err) {

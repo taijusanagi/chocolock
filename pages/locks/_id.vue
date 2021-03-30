@@ -23,7 +23,7 @@ export default Vue.extend({
     const doc = await firestore.collection("locks").doc(id).get();
     const lock = doc.data();
     if (!lock) {
-      this.$router.push("/locks/");
+      this.$router.push("/locks");
       return;
     }
     this.lock = lock;
