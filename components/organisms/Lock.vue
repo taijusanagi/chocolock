@@ -18,7 +18,9 @@
       {{ password ? password : "🔒" }}
     </p>
     <AtomsButton v-if="password === ''" class="mb-4" @click="unlock">Unlock</AtomsButton>
-    <AtomsButton v-if="lock.userAddress === userAddress">Edit</AtomsButton>
+    <NuxtLink v-if="lock.userAddress === userAddress" :to="`./${lock.id}/edit`"
+      ><AtomsButton>Edit</AtomsButton></NuxtLink
+    >
   </section>
 </template>
 
@@ -34,7 +36,7 @@ export default Vue.extend({
       default: undefined,
     },
   },
-  data: () => {
+  data() {
     return {
       password: "",
     };

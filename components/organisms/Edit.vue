@@ -6,11 +6,24 @@
     <form class="mb-8">
       <AtomsRadio v-model="chainId" :values="chainIdValues" :labels="chainIdLabels" class="mb-1" />
       <AtomsLabel text="NFT Contract Address" />
-      <AtomsInput v-model="nftContractAddress" type="text" placeholder="0x..." class="mb-2" />
+      <AtomsInput
+        v-model="nftContractAddress"
+        :initial-value="nftContractAddress"
+        type="text"
+        placeholder="0x..."
+        class="mb-2"
+      />
       <AtomsLabel text="Content URL" />
-      <AtomsInput v-model="contentUrl" type="text" placeholder="https://..." class="mb-2" />
+      <AtomsInput
+        v-model="contentUrl"
+        :initial-value="contentUrl"
+        :value="contentUrl"
+        type="text"
+        placeholder="https://..."
+        class="mb-2"
+      />
       <AtomsLabel text="Password" />
-      <AtomsInput v-model="password" type="password" placeholder="password" class="mb-2" />
+      <AtomsInput v-model="password" :value="password" type="password" placeholder="password" class="mb-2" />
     </form>
     <AtomsButton class="w-32 mx-auto" @click="send">Lock</AtomsButton>
   </section>
@@ -28,13 +41,19 @@ import { functions } from "@/modules/firebase";
 import Vue from "vue";
 
 export default Vue.extend({
+  props: {
+    lock: {
+      type: Object,
+      default: undefined,
+    },
+  },
   data() {
     return {
       chainIdValues,
       chainIdLabels,
-      chainId: chainIdValues[0],
-      nftContractAddress: "",
-      contentUrl: "",
+      chainId: this.lock.chainId,
+      nftContractAddress: this.lock.nftContractAddress,
+      contentUrl: this.lock.contentUrl,
       password: "",
     };
   },

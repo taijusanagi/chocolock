@@ -1,6 +1,12 @@
 <template>
   <div>
-    <input :type="type" :placeholder="placeholder" class="form-input block w-full text-xs rounded-md" @input="input" />
+    <input
+      :value="initialValue"
+      :type="type"
+      :placeholder="placeholder"
+      class="form-input block w-full text-xs rounded-md"
+      @input="input"
+    />
   </div>
 </template>
 
@@ -13,6 +19,10 @@ export default Vue.extend({
       default: undefined,
     },
     placeholder: {
+      type: String,
+      default: undefined,
+    },
+    initialValue: {
       type: String,
       default: undefined,
     },
