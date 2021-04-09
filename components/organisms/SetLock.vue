@@ -7,6 +7,8 @@
       <AtomsRadio v-model="chainId" :values="chainIdValues" :labels="chainIdLabels" class="mb-1" />
       <AtomsLabel text="NFT Contract Address" />
       <AtomsInput v-model="nftContractAddress" type="text" placeholder="0x..." class="mb-2" />
+      <AtomsLabel text="【Optional】TokenIds" />
+      <AtomsInput v-model="rawTokenIds" type="text" placeholder="0, 1, 2, ..." class="mb-2" />
       <AtomsLabel text="Content URL" />
       <AtomsInput v-model="contentUrl" :value="contentUrl" type="text" placeholder="https://..." class="mb-2" />
       <AtomsLabel text="Password" />
@@ -30,6 +32,7 @@ export default Vue.extend({
       chainIdLabels,
       chainId: chainIdValues[0],
       nftContractAddress: "",
+      rawTokenIds: "",
       contentUrl: "",
       password: "",
     };
@@ -38,7 +41,9 @@ export default Vue.extend({
     async send() {
       this.toggleLoadingOverlay();
       try {
-        const { chainId, nftContractAddress, contentUrl, password } = this;
+        const { chainId, nftContractAddress, contentUrl, password, rawTokenIds } = this;
+        let tokenIds: string[] = [];
+        if (rawTokenIds != "") tokenIds = rawTokenIds.split(",");
         const isAddress = ethers.utils.isAddress(nftContractAddress);
         if (!isAddress) {
           this.openNotificationToast({ type: "error", text: `Please input valid address` });
@@ -60,6 +65,7 @@ export default Vue.extend({
           nftContractAddress,
           contentUrl,
           password,
+          tokenIds,
         });
         this.openNotificationToast({ type: "success", text: "Content is locked!" });
         this.toggleLoadingOverlay();

@@ -13,6 +13,10 @@
         {{ getNetworkNameFromChainId(lock.chainId) }}-{{ lock.nftContractAddress }}
       </p>
     </a>
+    <div v-if="lock.tokenIds.length != 0">
+      <p class="text-primary text-md font-medium mb-1">TokenIds</p>
+      <p class="text-xs mb-4">{{ lock.tokenIds }}</p>
+    </div>
     <p class="text-primary text-md font-medium mb-1">Password</p>
     <p class="text-xs text-secondary mb-8">
       {{ password ? password : "🔒" }}
@@ -79,6 +83,22 @@ export default Vue.extend({
           this.openNotificationToast({ type: "error", text: `password already unlocked` });
           this.toggleLoadingOverlay();
           return;
+        }
+        if (this.lock.tokenIds.length != 0) {
+          let isOwner = 0;
+          await Promise.all(
+            this.lock.tokenIds.map(async (tokenId: number) => {
+              const ownerAddress = await erc721Contract.attach(this.lock.nftContractAddress).ownerOf(tokenId);
+              if (this.userAddress == ownerAddress.toLowerCase()) {
+                isOwner++;
+              }
+            })
+          );
+          if (isOwner == 0) {
+            this.openNotificationToast({ type: "error", text: `must have nft to unlock` });
+            this.toggleLoadingOverlay();
+            return;
+          }
         }
         const { data } = await functions.httpsCallable("unlock")({
           id: this.lock.id,

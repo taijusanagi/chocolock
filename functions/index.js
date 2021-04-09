@@ -32,7 +32,7 @@ module.exports.lock = functions.region("asia-northeast1").https.onCall(async (da
     );
   }
   const userAddress = context.auth.uid;
-  const { chainId, nftContractAddress, contentUrl, password } = data;
+  const { chainId, nftContractAddress, contentUrl, password, tokenIds } = data;
   const id = uuidv4();
   const ivBuffer = crypto.randomBytes(16);
   const cipher = crypto.createCipheriv(algorithm, Buffer.from(secretKey, "hex"), ivBuffer);
@@ -48,6 +48,7 @@ module.exports.lock = functions.region("asia-northeast1").https.onCall(async (da
     contentUrl,
     encryptedPassword,
     iv,
+    tokenIds,
   });
   return id;
 });
