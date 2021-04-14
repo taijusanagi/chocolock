@@ -13,7 +13,7 @@
         {{ getNetworkNameFromChainId(lock.chainId) }}-{{ lock.nftContractAddress }}
       </p>
     </a>
-    <div v-if="lock.tokenIds.length != 0">
+    <div v-if="lock.tokenIds && lock.tokenIds.length != 0">
       <p class="text-primary text-md font-medium mb-1">TokenIds</p>
       <p class="text-xs mb-4">{{ lock.tokenIds }}</p>
     </div>
@@ -84,7 +84,7 @@ export default Vue.extend({
           this.toggleLoadingOverlay();
           return;
         }
-        if (this.lock.tokenIds.length != 0) {
+        if (this.lock.tokenIds && this.lock.tokenIds.length != 0) {
           let isOwner = 0;
           await Promise.all(
             this.lock.tokenIds.map(async (tokenId: number) => {
